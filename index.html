@@ -1,182 +1,382 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Be My Valentine ❤️</title>
-
+<title>Will You Be My Valentine ❤️</title>
 <style>
-body {
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
-    font-family: 'Segoe UI', cursive;
-    background: linear-gradient(135deg, #ffb6c1, #ff6f91);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    overflow:hidden;
+    height:100vh;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(to top,#ffe6f0,#fff5fa);
+    transition:1.5s ease;
 }
 
-.container {
-    position: relative;
-    z-index: 2;
+/* Cinematic Intro */
+#intro{
+    position:fixed;width:100%;height:100%;
+    background:black;color:white;
+    display:flex;flex-direction:column;
+    justify-content:center;align-items:center;
+    z-index:200;
+}
+#intro h1{font-size:2rem;opacity:0;animation:fadeIn 2s forwards;}
+#intro h2{margin-top:20px;font-size:1.2rem;opacity:0;animation:fadeIn 2s forwards 2s;}
+@keyframes fadeIn{to{opacity:1;}}
+@keyframes fadeOut{to{opacity:0;visibility:hidden;}}
+
+/* Main container */
+.container{
+    position:absolute;
+    top:50%;
+    width:100%;
+    text-align:center;
+    transform:translateY(-50%);
+    z-index:50;
+}
+h1{
+    color:#c2185b;
+    font-size:2rem;
+}
+#reaction{
+    font-size:2rem;
+    margin-left:10px;
+}
+button{
+    padding:15px 35px;
+    margin:15px;
+    font-size:1.1rem;
+    border:none;border-radius:40px;
+    cursor:pointer;font-weight:bold;
+    transition:0.3s;
+}
+#yesBtn{background:#b2f7ef;color:#004d40;}
+#noBtn{background:#ff8fab;color:white;}
+button:hover{transform:scale(1.05);}
+
+/* Clouds */
+.cloud{
+    position:absolute;
+    width:180px;height:70px;
+    background:#fff;
+    border-radius:50px;
+    opacity:0.95;
+    transition:0.5s;
+}
+.cloud::before,.cloud::after{
+    content:'';
+    position:absolute;
+    background:inherit;
+    width:100px;height:70px;
+    top:-30px;border-radius:50%;
+}
+.cloud::before{left:20px;}
+.cloud::after{right:20px;}
+.static1{top:80px;left:20%;}
+.static2{top:120px;left:50%;}
+.static3{top:60px;left:70%;}
+
+/* Trees */
+.tree{
+    position:absolute;
+    bottom:0;
+    width:100px;height:180px;
+    background:#388e3c;
+    clip-path:polygon(50% 0%,0% 100%,100% 100%);
+    transform-origin:bottom;
+    transition:0.5s;
+}
+.left{left:10%;}
+.right{right:10%;}
+
+/* Rain */
+.raindrop{
+    position:absolute;
+    width:2px;height:15px;
+    background:rgba(173,216,230,0.8);
+    animation:rainFall linear infinite;
+}
+@keyframes rainFall{
+    from{transform:translateY(-100vh);}
+    to{transform:translateY(100vh);}
 }
 
-h1 {
-    font-size: 3em;
+/* Rainbow overlay */
+#rainbowOverlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;left:0;
+    pointer-events:none;
+    opacity:0;
+    transition:2s ease;
+    background:linear-gradient(
+        120deg,
+        rgba(255,0,0,0.15),
+        rgba(255,165,0,0.12),
+        rgba(255,255,0,0.12),
+        rgba(0,255,0,0.12),
+        rgba(0,0,255,0.12),
+        rgba(75,0,130,0.12),
+        rgba(238,130,238,0.15)
+    );
 }
 
-button {
-    padding: 15px 30px;
-    margin: 20px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: 0.3s;
+/* Sun */
+#sun{
+    position:absolute;
+    top:40px;
+    right:50px;
+    font-size:60px;
+    opacity:0;
+    transition:2s ease;
 }
 
-#yesBtn {
-    background-color: #ff4d6d;
-    color: white;
+/* Birds */
+.bird{
+    position:absolute;
+    font-size:25px;
+    animation:fly 8s linear forwards;
 }
-
-#noBtn {
-    background-color: white;
-    color: #ff4d6d;
-    position: absolute;
-}
-
-button:hover {
-    transform: scale(1.1);
-}
-
-/* Floating Hearts */
-.heart {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    transform: rotate(45deg);
-    animation: float 6s linear infinite;
-}
-
-.heart:before,
-.heart:after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-}
-
-.heart:before {
-    top: -10px;
-    left: 0;
-}
-
-.heart:after {
-    left: -10px;
-    top: 0;
-}
-
-@keyframes float {
-    0% { transform: translateY(100vh) rotate(45deg); opacity: 1; }
-    100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+@keyframes fly{
+    from{left:-50px;}
+    to{left:110%;}
 }
 
 /* Fireworks */
-.firework {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: yellow;
-    border-radius: 50%;
-    animation: explode 1s ease-out forwards;
+.firework{
+    position:absolute;
+    width:6px;height:6px;
+    border-radius:50%;
+    animation:explode 1.5s forwards;
+}
+@keyframes explode{
+    0%{transform:scale(1);opacity:1;}
+    100%{transform:scale(20);opacity:0;}
 }
 
-@keyframes explode {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(15); opacity: 0; }
+#celebration{
+    display:none;
+    font-size:1.6rem;
+    margin-top:20px;
+    color:#d81b60;
 }
 
-#celebration {
-    font-size: 2.5em;
-    display: none;
-    margin-top: 20px;
+@media(max-width:600px){
+    h1{font-size:1.5rem;}
+    button{padding:12px 25px;font-size:1rem;}
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
-    <h1>Will you be my Valentine? ❤️</h1>
-    <button id="yesBtn">YES 💖</button>
-    <button id="noBtn">NO 💔</button>
-    <div id="celebration">🎉 Thank you for being my Valentine!! 🎉</div>
+<!-- Cinematic Intro -->
+<div id="intro">
+<h1>Every Love Story Faces a Storm...</h1>
+<h2>But Only One Choice Brings Sunshine ❤️</h2>
 </div>
 
+<!-- Overlay, Clouds, Trees -->
+<div id="rainbowOverlay"></div>
+<div id="sun">☀️</div>
+
+<div class="cloud static1"></div>
+<div class="cloud static2"></div>
+<div class="cloud static3"></div>
+
+<div class="tree left" id="tree1"></div>
+<div class="tree right" id="tree2"></div>
+
+<!-- Main container -->
+<div class="container">
+<h1>Will you be my Valentine? ❤️ <span id="reaction">😊</span></h1>
+<button id="yesBtn">YES ❤️</button>
+<button id="noBtn">NO 💔</button>
+<div id="celebration">Thank you for being my Valentine 💖</div>
+</div>
+
+<!-- Music -->
+<audio id="romanticMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8f2c8e8b5.mp3?filename=romantic-love-112199.mp3">
+</audio>
+<audio id="stormMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_6f803b6c6f.mp3?filename=dark-ambient-124008.mp3">
+</audio>
+<audio id="thunder">
+<source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_8f1bfc41e7.mp3?filename=thunder-25689.mp3">
+</audio>
+
 <script>
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const celebration = document.getElementById("celebration");
+/* ---------- Intro Animation ---------- */
+const intro = document.getElementById("intro");
+setTimeout(()=>{
+    intro.style.animation="fadeOut 2s forwards";
+},5000);
 
-const messages = [
-"Please 🥺",
-"Think again 💭",
-"Consider once more 💕",
-"I will always be there for you ❤️",
-"You are my favorite person 💖",
-"Don't break my heart 😢",
-"I promise unlimited hugs 🤗",
-"Say yes and make my day 🌹",
-"You know you want to 😘"
-];
+/* ---------- Variables ---------- */
+let stormLevel=0;
+let rainInterval;
+let darkness=0;
 
-let msgIndex = 0;
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const reaction=document.getElementById("reaction");
+const tree1=document.getElementById("tree1");
+const tree2=document.getElementById("tree2");
+const rainbow=document.getElementById("rainbowOverlay");
+const sun=document.getElementById("sun");
+const thunder=document.getElementById("thunder");
+const celebration=document.getElementById("celebration");
+const clouds=document.querySelectorAll(".cloud");
 
-noBtn.addEventListener("mouseover", () => {
-    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
-    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-    alert(messages[msgIndex % messages.length]);
-    msgIndex++;
+const romanticMusic=document.getElementById("romanticMusic");
+const stormMusic=document.getElementById("stormMusic");
+
+const messages=["Are you sure? 😢","Think again 💔","My heart needs you ❤️","I'll wait forever 💞","Please reconsider 🥺"];
+let index=0;
+
+/* ---------- Start Romantic Music After Click ---------- */
+document.body.addEventListener("click",()=>{
+    romanticMusic.volume=0.4;
+    romanticMusic.play();
+},{once:true});
+
+/* ---------- NO Click ---------- */
+noBtn.onclick=()=>{
+stormLevel++;
+noBtn.innerText=messages[index%messages.length];
+index++;
+reaction.innerText=stormLevel>3?"😟":"😢";
+
+/* Thunder & storm music */
+thunder.currentTime=0; thunder.play();
+fadeOut(romanticMusic);
+stormMusic.volume=0.4;
+stormMusic.play();
+
+increaseDarkness();
+darkenClouds();
+increaseWind();
+createRain(stormLevel*25);
+createLightning();
+};
+
+/* ---------- YES Click ---------- */
+yesBtn.onclick=()=>{
+stormLevel=0; darkness=0;
+clearInterval(rainInterval);
+document.querySelectorAll(".raindrop").forEach(r=>r.remove());
+
+document.body.style.background="linear-gradient(to top,#fff0f6,#fffafd)";
+clouds.forEach(c=>c.style.background="#fff");
+tree1.style.transform="rotate(0deg)";
+tree2.style.transform="rotate(0deg)";
+reaction.innerText="😍";
+
+rainbow.style.opacity=1;
+sun.style.opacity=1;
+celebration.style.display="block";
+
+/* Switch music */
+stormMusic.pause();
+fadeIn(romanticMusic);
+
+/* Effects */
+setInterval(fireworks,600);
+spawnBirds();
+};
+
+/* ---------- Background & Clouds ---------- */
+function increaseDarkness(){
+darkness+=25; if(darkness>200) darkness=200;
+document.body.style.background=
+`linear-gradient(to top,rgb(${255-darkness},${220-darkness},${230-darkness}),rgb(${240-darkness},${200-darkness},${220-darkness}))`;
+}
+function darkenClouds(){
+clouds.forEach(c=>{
+let shade=255-(stormLevel*30); if(shade<80) shade=80;
+c.style.background=`rgb(${shade},${shade},${shade})`;
 });
-
-yesBtn.addEventListener("click", () => {
-    celebration.style.display = "block";
-    launchFireworks();
-});
-
-function launchFireworks() {
-    for (let i = 0; i < 20; i++) {
-        const firework = document.createElement("div");
-        firework.classList.add("firework");
-        firework.style.top = Math.random() * window.innerHeight + "px";
-        firework.style.left = Math.random() * window.innerWidth + "px";
-        firework.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        document.body.appendChild(firework);
-
-        setTimeout(() => {
-            firework.remove();
-        }, 1000);
-    }
 }
 
-// Generate floating hearts
-setInterval(() => {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    document.body.appendChild(heart);
+/* ---------- Wind / Trees ---------- */
+function increaseWind(){
+let wind=stormLevel*8;
+tree1.style.transform=`rotate(${-wind}deg)`;
+tree2.style.transform=`rotate(${-wind}deg)`;
+}
 
-    setTimeout(() => {
-        heart.remove();
-    }, 6000);
-}, 500);
+/* ---------- Rain ---------- */
+function createRain(intensity){
+clearInterval(rainInterval);
+rainInterval=setInterval(()=>{
+for(let i=0;i<intensity;i++){
+let drop=document.createElement("div");
+drop.className="raindrop";
+drop.style.left=Math.random()*100+"vw";
+drop.style.animationDuration=(0.5+Math.random())+"s";
+document.body.appendChild(drop);
+setTimeout(()=>drop.remove(),1000);
+}
+},200);
+}
+
+/* ---------- Lightning ---------- */
+function createLightning(){
+clouds.forEach(cloud=>{
+let bolt=document.createElement("div");
+bolt.style.position="absolute";
+bolt.style.width="4px";
+bolt.style.height="60px";
+bolt.style.background="white";
+bolt.style.top="60px";
+bolt.style.left=Math.random()*150+"px";
+bolt.style.boxShadow="0 0 15px white";
+bolt.style.transform="skewX(-20deg)";
+cloud.appendChild(bolt);
+setTimeout(()=>bolt.remove(),200);
+});
+}
+
+/* ---------- Fireworks ---------- */
+function fireworks(){
+for(let i=0;i<15;i++){
+let fw=document.createElement("div");
+fw.className="firework";
+fw.style.top=Math.random()*100+"vh";
+fw.style.left=Math.random()*100+"vw";
+fw.style.background=`hsl(${Math.random()*360},100%,60%)`;
+document.body.appendChild(fw);
+setTimeout(()=>fw.remove(),1500);
+}
+}
+
+/* ---------- Birds ---------- */
+function spawnBirds(){
+for(let i=0;i<5;i++){
+let bird=document.createElement("div");
+bird.className="bird";
+bird.innerText="🕊️";
+bird.style.top=(50+Math.random()*150)+"px";
+bird.style.animationDuration=(6+Math.random()*4)+"s";
+document.body.appendChild(bird);
+setTimeout(()=>bird.remove(),8000);
+}
+}
+
+/* ---------- Audio fade --------- */
+function fadeOut(audio){
+let fade=setInterval(()=>{
+if(audio.volume>0.05){audio.volume-=0.05;}else{audio.pause();clearInterval(fade);}
+},100);
+}
+function fadeIn(audio){
+audio.play();
+let fade=setInterval(()=>{
+if(audio.volume<0.4){audio.volume+=0.05;}else{clearInterval(fade);}
+},100);
+}
 </script>
 
 </body>
